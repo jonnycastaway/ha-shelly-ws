@@ -1,0 +1,13 @@
+{
+  "domain": "shelly_dimmer_ws",
+  "name": "Shelly Dimmer WebSocket",
+  "version": "1.0.0",
+  "documentation": "https://github.com/YOUR_GITHUB/shelly-dimmer-ws-ha",
+  "issue_tracker": "https://github.com/YOUR_GITHUB/shelly-dimmer-ws-ha/issues",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": ["@YOUR_GITHUB"],
+  "config_flow": true,
+  "iot_class": "local_push",
+  "integration_type": "device"
+}
