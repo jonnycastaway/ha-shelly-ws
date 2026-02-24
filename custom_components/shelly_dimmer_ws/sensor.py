@@ -18,6 +18,7 @@ from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import SIGNAL_CONNECTED, SIGNAL_DISCONNECTED, SIGNAL_UPDATE
+from .websocket_client import ShellyWebSocketClient
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
@@ -118,6 +119,19 @@ class ShellyPowerSensor(SensorEntity):
                 self._handle_disconnected,
             )
         )
+        # Sofort initialen Status holen, falls WS bereits verbunden ist
+        # (z.B. nach HA-Neustart wenn Verbindung schon stand)
+        client: ShellyWebSocketClient = self.hass.data[DOMAIN][self._entry.entry_id]
+        if client.connected:
+            self.hass.async_create_task(self._fetch_initial())
+
+    async def _fetch_initial(self) -> None:
+        client: ShellyWebSocketClient = self.hass.data[DOMAIN][self._entry.entry_id]
+        try:
+            result = await client.call("Shelly.GetStatus")
+            self._handle_update({"method": "NotifyStatus", "params": result})
+        except Exception as err:
+            _LOGGER.debug("Initial fetch failed: %s", err)
 
     @callback
     def _handle_connected(self) -> None:

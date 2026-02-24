@@ -72,6 +72,16 @@ class ShellyDimmerLight(LightEntity):
                 self._handle_disconnected,
             )
         )
+        # Sofort initialen Status holen, falls WS bereits verbunden ist
+        if self._client.connected:
+            self.hass.async_create_task(self._fetch_initial())
+
+    async def _fetch_initial(self) -> None:
+        try:
+            result = await self._client.call("Shelly.GetStatus")
+            self._handle_update({"method": "NotifyStatus", "params": result})
+        except Exception as err:
+            _LOGGER.debug("Initial fetch failed: %s", err)
 
     @callback
     def _handle_connected(self) -> None:
