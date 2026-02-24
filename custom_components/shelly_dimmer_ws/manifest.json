@@ -1,7 +1,7 @@
 {
   "domain": "shelly_dimmer_ws",
   "name": "Shelly Dimmer WebSocket",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "documentation": "https://github.com/jonnycastaway/ha-shelly-ws",
   "issue_tracker": "https://github.com/jonnycastaway/ha-shelly-ws/issues",
   "requirements": [],
